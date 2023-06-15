@@ -1,0 +1,269 @@
+basePath: /api/v1
+definitions:
+    helper.Meta:
+        properties:
+            code:
+                type: integer
+            message:
+                type: string
+            status:
+                type: string
+        type: object
+    helper.Response:
+        properties:
+            data: {}
+            meta:
+                $ref: "#/definitions/helper.Meta"
+        type: object
+    orders.SaveItemInput:
+        properties:
+            description:
+                type: string
+            itemCode:
+                type: string
+            quantity:
+                type: integer
+        required:
+            - description
+            - itemCode
+            - quantity
+        type: object
+    orders.SaveOrderInput:
+        properties:
+            items:
+                items:
+                    $ref: "#/definitions/orders.SaveItemInput"
+                type: array
+        type: object
+    orders.UpdateItemInput:
+        properties:
+            description:
+                type: string
+            itemCode:
+                type: string
+            lineItemId:
+                type: integer
+            quantity:
+                type: integer
+        required:
+            - description
+            - itemCode
+            - lineItemId
+            - quantity
+        type: object
+    orders.UpdateOrderInput:
+        properties:
+            items:
+                items:
+                    $ref: "#/definitions/orders.UpdateItemInput"
+                type: array
+        type: object
+    users.LoginUserInput:
+        properties:
+            email:
+                type: string
+            password:
+                type: string
+        required:
+            - email
+            - password
+        type: object
+    users.RegisterUserInput:
+        properties:
+            email:
+                type: string
+            name:
+                type: string
+            password:
+                type: string
+        required:
+            - email
+            - name
+            - password
+        type: object
+host: 127.0.0.1:8080
+info:
+    description: This is a sample server for a store.
+    termsOfService: http://swagger.io/terms/
+    title: Go Hacktiv8 Assignment 2 API Documentation
+    version: 1.0.0
+paths:
+    /login:
+        post:
+            consumes:
+                - application/json
+            description: Login user
+            parameters:
+                - description: User
+                  in: body
+                  name: user
+                  required: true
+                  schema:
+                      $ref: "#/definitions/users.LoginUserInput"
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+                "400":
+                    description: Bad Request
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Login user
+            tags:
+                - user
+    /orders:
+        get:
+            consumes:
+                - application/json
+            description: Get all orders
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Show all orders
+            tags:
+                - orders
+        post:
+            consumes:
+                - application/json
+            description: Create new order
+            parameters:
+                - description: Order
+                  in: body
+                  name: order
+                  required: true
+                  schema:
+                      $ref: "#/definitions/orders.SaveOrderInput"
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Create new order
+            tags:
+                - orders
+    /orders/{order_id}:
+        delete:
+            consumes:
+                - application/json
+            description: Delete order
+            parameters:
+                - description: Order ID
+                  in: path
+                  name: order_id
+                  required: true
+                  type: integer
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Delete order
+            tags:
+                - orders
+        get:
+            consumes:
+                - application/json
+            description: Get orders by user id
+            parameters:
+                - description: User ID
+                  in: path
+                  name: order_id
+                  required: true
+                  type: integer
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Show orders by user id
+            tags:
+                - orders
+        put:
+            consumes:
+                - application/json
+            description: Update order
+            parameters:
+                - description: Order ID
+                  in: path
+                  name: order_id
+                  required: true
+                  type: integer
+                - description: Order
+                  in: body
+                  name: order
+                  required: true
+                  schema:
+                      $ref: "#/definitions/orders.UpdateOrderInput"
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Update order
+            tags:
+                - orders
+    /orders/person/{order_id}:
+        get:
+            consumes:
+                - application/json
+            description: Get order person by order id
+            parameters:
+                - description: Order ID
+                  in: path
+                  name: order_id
+                  required: true
+                  type: integer
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Show order person by order id
+            tags:
+                - orders
+    /register:
+        post:
+            consumes:
+                - application/json
+            description: Register new user
+            parameters:
+                - description: User
+                  in: body
+                  name: user
+                  required: true
+                  schema:
+                      $ref: "#/definitions/users.RegisterUserInput"
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: OK
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+                "400":
+                    description: Bad Request
+                    schema:
+                        $ref: "#/definitions/helper.Response"
+            summary: Register new user
+            tags:
+                - user
+schemes:
+    - http
+swagger: "2.0"
